@@ -1,0 +1,30 @@
+{
+  "manifest_version": 2,
+
+  "name": "MyHome",
+
+  "description": "Personalized new tab page",
+
+  "version": "0.1",
+
+  "icons": {
+    "128": "img/google_home.png"
+  },
+
+  "page_action": {
+    "default_icon": "img/google_home.png",
+    "default_title": "MyHome"
+  },
+
+  "incognito": "split",
+
+  "chrome_url_overrides": {
+    "newtab": "html/new_tab.html"
+  },
+
+  "permissions": [
+    "bookmarks",
+    "history",
+    "storage"
+  ]
+}

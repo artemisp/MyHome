@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MyHome</title>
+    <link rel="stylesheet" href="../css/new_tab.css">
+<body>
+<h1 id="clock">00:00</h1>
+<form method="get" action="http://www.google.com/search">
+    <input id="search" type="text" name="q" size="31" maxlength="255" value="" placeholder="Search..." />
+    <br />
+</form>
+<h2 id="notes">
+    <text>NOTEPAD</text>
+    <label for="noteText"></label><textarea id="noteText"></textarea>
+</h2>
+<button id="accountBtn" type="button">Account</button>
+<div id="authentication-popup">
+    <text id="authErr">Authentication failed. Please try again.</text>
+    <text id="signupErr">Sign up failed. Please try again.</text>
+    <input id="username" type="text" placeholder="username.." />
+    <input id="password" type="password" placeholder="password.." />
+    <button id="signInBtn">Sign In</button>
+    <button id="signUpBtn">Sign Up</button>
+    <button id="signOutBtn" >Sign Out</button>
+</div>
+</body>
+<script src="jquery.min.js"></script>
+<script src="../js/tab.js"></script>
+</html>
