@@ -3,12 +3,14 @@ var data = {
   {
     "artemis":{
     "password": "1234",
-      "text": "hello"
+      "text": "hello",
+      "background": "http://www.allwhitebackground.com/images/2/2273.jpg"
   },
 
     "poly":{
       "password": "123",
-      "text": "mama"
+      "text": "mama",
+      "background": "https://hdwallsource.com/img/2014/4/background-wallpaper-22928-23564-hd-wallpapers.jpg"
     }
   }
 };
@@ -30,6 +32,7 @@ $(function authentication() {
 
   if (isAuthenticated) {
     $('#noteText').val(data.users[username]['text']);
+    $('#body').css({background: 'url('+data.users[username]['background']+')'});
   }
 
 
@@ -58,6 +61,25 @@ $(function authentication() {
 
   });
 
+  $('#backgroundBtn').click(function () {
+    $('#background-url').val('');
+    var $popup = $('#background-popup');
+    if ($popup.css('display') === 'none') $popup.css({display : 'block'});
+    else if ($popup.css('display') === 'block') $popup.css({display : 'none'});
+  });
+
+  $('#uploadBtn').click(function () {
+    var url = $('#background-url').val();
+    if (url) {
+      $('#body').css({background: 'url('+url+')'});
+
+      if (isAuthenticated) {
+        data.users[username]['background'] = url;
+      }
+    }
+
+  });
+
   $('#signUpBtn').click(function () {
     username = $('#username').val();
     var password = $('#password').val();
@@ -83,6 +105,7 @@ $('#signInBtn').click(function () {
   if (user_obj && user_obj['password'] === password) {
     isAuthenticated = true;
     $('#noteText').val(user_obj['text']);
+    $('#body').css({background: 'url('+data.users[username]['background']+')'});
   } else {
     username = null;
     $('#authErr').css({display: 'block'});
@@ -92,6 +115,7 @@ $('#signInBtn').click(function () {
   $('#signOutBtn').click(function () {
     data.users[username]['text'] = $('#noteText').val();
     $('#noteText').val('');
+    $('#body').css({background: 'url()'});
     username = null;
     isAuthenticated = false;
   });

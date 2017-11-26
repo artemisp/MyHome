@@ -4,7 +4,7 @@ body {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: bold;
     color: #999;
-    background: white;
+    background-color: white;
 }
 #clock {
     position: absolute;
@@ -44,6 +44,16 @@ textarea#noteText {
     border: hidden;
 }
 
+#backgroundBtn {
+    height: 30px;
+    width: 100px;
+    background-color: black;
+    color: white;
+    position: absolute;
+    top: 3%;
+    left: 80%;
+}
+
 #accountBtn {
     height: 30px;
     width: 100px;
@@ -52,6 +62,15 @@ textarea#noteText {
     position: absolute;
     top: 3%;
     left: 90%;
+}
+
+div#background-popup {
+    display: none;
+    position: absolute;
+    top: 10%;
+    left: 80.2%;
+    width: 200px;
+    height: 50px;
 }
 
 div#authentication-popup {
