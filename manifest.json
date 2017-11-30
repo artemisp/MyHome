@@ -8,18 +8,18 @@
   "version": "0.1",
 
   "icons": {
-    "128": "img/google_home.png"
+    "128": "public/images/google_home.png"
   },
 
   "page_action": {
-    "default_icon": "img/google_home.png",
+    "default_icon": "public/images/google_home.png",
     "default_title": "MyHome"
   },
 
   "incognito": "split",
 
   "chrome_url_overrides": {
-    "newtab": "html/new_tab.html"
+    "newtab": "views/tab.html"
   },
 
   "permissions": [

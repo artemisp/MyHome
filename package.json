@@ -2,6 +2,12 @@
   "name": "MyHome",
   "version": "0.0.1",
   "dependencies": {
-    "mongodb": "latest"
+    "mongodb": "latest",
+    "mongoose": "^4.13.5",
+    "bcrypt": "latest",
+    "body-parser": "latest",
+    "express": "latest",
+    "ejs": "latest",
+    "cookie-session": "latest"
   }
 }
