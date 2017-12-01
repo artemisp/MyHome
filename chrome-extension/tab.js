@@ -24,7 +24,8 @@ $(function updateClock(){
 
 
 var isAuthenticated = false;
-var username = null;
+var currUser = null;
+var background = '';
 
 
 $(function authentication() {
@@ -36,7 +37,7 @@ $(function authentication() {
 
 
   $('#accountBtn').click(function () {
-    $('#authErr').css({display: 'none'});
+   $('#authErr').css({display: 'none'});
     $('#signupErr').css({display: 'none'});
     $('#username').val('');
     $('#password').val('');
@@ -60,7 +61,74 @@ $(function authentication() {
 
   });
 
-  $('#backgroundBtn').click(function () {
+
+$('#signUpBtn').click(function () {
+  username = $('#username').val();
+  var password = $('#password').val();
+  var text = $('#noteText').val();
+  if (username && password) {
+    data.users[username] = {
+      "password": password,
+      "text": text
+    };
+    isAuthenticated = true;
+  } else {
+    username = null;
+    $('#signupErr').css({display: 'block'});
+  }
+});
+
+
+$('#signInBtn').click(function () {
+  var username = $('#username').val();
+  var password = $('#password').val();
+  $.ajax({
+    url: '/login',
+    data: {username: username, password: password},
+    type: 'POST',
+    success: function (data) {
+      if (data.isValid) {
+        //TODO: update data instead
+        currUser = username;
+        isAuthenticated = true;
+        console.log('User signed in.');
+      }
+    }
+
+  })
+
+
+  /*var user_obj = data.users[username];
+  if (user_obj && user_obj['password'] === password) {
+    isAuthenticated = true;
+    $('#noteText').val(user_obj['text']);
+    $('#body').css({background: 'url('+data.users[username]['background']+')'});
+  } else {
+    username = null;
+    $('#authErr').css({display: 'block'});
+  }*/
+
+});
+
+$('#signOutBtn').click(function () {
+  //update user
+  $('#noteText').val('');
+  $('#body').css({background: 'url()'});
+  username = null;
+  isAuthenticated = false;
+});
+
+
+var showAuthError = function () {
+  $('#authErr').css({display: 'block'});
+};
+
+var showSignupError = function () {
+  $('#signupErr').css({display: 'block'});
+};
+
+
+$('#backgroundBtn').click(function () {
     $('#background-url').val('');
     var $popup = $('#background-popup');
     if ($popup.css('display') === 'none') $popup.css({display : 'block'});
@@ -70,6 +138,7 @@ $(function authentication() {
   $('#uploadBtn').click(function () {
     var url = $('#background-url').val();
     if (url) {
+      background = 'url('+url+')';
       $('#body').css({background: 'url('+url+')'});
 
       if (isAuthenticated) {
@@ -77,45 +146,5 @@ $(function authentication() {
       }
     }
 
-  });
-
-  $('#signUpBtn').click(function () {
-    username = $('#username').val();
-    var password = $('#password').val();
-    var text = $('#noteText').val();
-    if (username && password) {
-      data.users[username] = {
-        "password": password,
-        "text": text
-      };
-      isAuthenticated = true;
-    } else {
-      username = null;
-      $('#signupErr').css({display: 'block'});
-    }
-  });
-
-
-$('#signInBtn').click(function () {
-  username = $('#username').val();
-  var password = $('#password').val();
-
-  var user_obj = data.users[username];
-  if (user_obj && user_obj['password'] === password) {
-    isAuthenticated = true;
-    $('#noteText').val(user_obj['text']);
-    $('#body').css({background: 'url('+data.users[username]['background']+')'});
-  } else {
-    username = null;
-    $('#authErr').css({display: 'block'});
-  }
-});
-
-  $('#signOutBtn').click(function () {
-    data.users[username]['text'] = $('#noteText').val();
-    $('#noteText').val('');
-    $('#body').css({background: 'url()'});
-    username = null;
-    isAuthenticated = false;
   });
 

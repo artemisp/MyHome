@@ -8,7 +8,9 @@ var bcrypt = require('bcrypt');
 
 var userSchema = new Schema({
   username: { type: String, required: true, unique: true },
-  password: { type: String, required: true }
+  password: { type: String, required: true },
+  backgound: { type: String },
+  notes: { type: String }
 });
 
 userSchema.pre('save', function(next) {
@@ -41,6 +43,16 @@ userSchema.statics.checkIfLegit = function(username, password, cb) {
         if (err) return cb(err);
         cb(null, isRight);
       });
+    }
+  });
+};
+
+userSchema.statics.updateUser = function(username, backgound, notes, cb) {
+  this.findOne({username: username}, function (err, user) {
+    if (err) cb('no user');
+    if (user) {
+      user.background = background;
+      user.notes = notes;
     }
   });
 };

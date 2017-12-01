@@ -14,7 +14,7 @@ app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist/'));
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended: true}));
 
-MongoClient.connect('mongodb://localhost/db', (err, database) => {
+MongoClient.connect('mongodb://localhost/newDB', (err, database) => {
   if (err) return console.log(err);
   db = database;
   app.listen(3000, function () {
@@ -35,62 +35,59 @@ app.use(cookieSession({
 
 
 app.get('/', function (req, res) {
- /* if (req.session.username && req.session.username !== '') {
+  if (req.session.username && req.session.username !== '') {
    // res.redirect('/protected');
   } else {
    // res.redirect('/login');
-  }*/
- res.render()
-});
-
-app.get('/login', function (req, res) {
- // res.render('login');
+  }
 });
 
 app.post('/login', function(req, res) {
+  console.log('got login request');
   username = req.body.username;
   password = req.body.password;
   User.checkIfLegit(username, password, function(err, isRight) {
     if (err) {
-   //   res.send('Error! ' + err);
+      showAuthError();
     } else {
       if (isRight) {
-   //     req.session.username = username;
-   //     res.redirect('/protected');
+        req.session.username = username;
       } else {
-    //    res.send('wrong password');
+        showAuthError();
       }
     }
   });
 
 });
 
-app.get('/register', function (req, res) {
-  res.render('register');
+app.get('/logout', function(req, res) {
+  req.session.username = '';
+  console.log('loged out');
+});
+
+
+/*app.get('/register', function (req, res) {
+  res.render('register.html');
 });
 
 app.post('/register', function(req, res) {
   User.addUser(req.body.username, req.body.password, function(err) {
-    if (err) res.send('error' + err);
-    else res.send('new user registered with username ' + req.body.username);
+    if (err) {
+      showSignupError();
+    }
+    else {
+      res.send('new user registered with username ' + req.body.username);
+    }
   });
 });
 
-app.get('/logout', function(req, res) {
-  req.session.username = '';
-  res.render('logout');
-});
 
 app.get('/protected', function(req, res) {
   if (!req.session.username || req.session.username === '') {
     res.send('You tried to access a protected page');
   } else {
-    res.render('protected', { username: req.session.username });
+    updateTab (function () {
+      res.render('protected.html');
+    });
   }
-});
-
-app.set('port', process.env.PORT || 3000);
-
-app.listen(app.get('port'), function() { 
-  console.log('listening');
-});
+});*/
