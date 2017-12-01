@@ -9,5 +9,9 @@
     "express": "latest",
     "ejs": "latest",
     "cookie-session": "latest"
+  },
+  "main": "app.js",
+  "scripts": {
+    "test": "node app.js"
   }
 }
