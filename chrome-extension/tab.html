@@ -4,21 +4,36 @@
     <title>MyHome</title>
     <link rel="stylesheet" href="tab.css">
 <body id="body">
+
 <h1 id="clock">00:00</h1>
+
+
+<div id="weather"></div>
+
 <form method="get" action="http://www.google.com/search">
     <input id="search" type="text" name="q" size="31" maxlength="255" value="" placeholder="Search..." />
     <br />
 </form>
+
 <h2 id="notes">
     <text>NOTEPAD</text>
     <label for="noteText"></label><textarea id="noteText"></textarea>
 </h2>
+
+<h3 id="todo">
+    <text>TODO</text>
+    <label for="todoText"></label><textarea id="todoText"></textarea>
+</h3>
+
 <button id="backgroundBtn" type="button">Change Background</button>
 <button id="accountBtn" type="button">Account</button>
+<button id="widgetsBtn" type="button">Widgets</button>
+
 <div id="background-popup">
     <input id="background-url" type="text" placeholder="paste url..." />
     <button id="uploadBtn">Upload</button>
 </div>
+
 <div id="authentication-popup">
     <text id="authErr">Authentication failed. Please try again.</text>
     <text id="signupErr">Sign up failed. Please try again.</text>
@@ -28,6 +43,14 @@
     <button id="signUpBtn">Sign Up</button>
     <button id="signOutBtn" >Sign Out</button>
 </div>
+
+<div id="widgets-popup">
+      <input type="checkbox" id="notepadSelector" checked="true">Notepad</input>
+      <input type="checkbox" id="todoSelector" checked="true">ToDo List</input>
+    <button id="SubmitWidgetsBtn">Submit</button>
+</div>
+
+
 </body>
 <script src="jquery.min.js"></script>
 <script src="tab.js"></script>

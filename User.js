@@ -9,8 +9,10 @@ var bcrypt = require('bcrypt');
 var userSchema = new Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  backgound: { type: String },
-  notes: { type: String }
+  background: { type: String },
+  notes: { type: String },
+  wTodo: { type: Boolean },
+  wNote: { type: Boolean }
 });
 
 userSchema.pre('save', function(next) {
@@ -30,8 +32,9 @@ userSchema.pre('save', function(next) {
   });
 });
 
-userSchema.statics.addUser = function(username, password, cb) {
-  var newUser = new this({ username: username, password: password});
+userSchema.statics.addUser = function(username, password, background, notes, wTD, wN, cb) {
+  var newUser = new this({ username: username, password: password, background: background, notes: notes,
+    wTodo: wTD, wNote: wN});
   newUser.save(cb);
 };
 
@@ -47,14 +50,27 @@ userSchema.statics.checkIfLegit = function(username, password, cb) {
   });
 };
 
-userSchema.statics.updateUser = function(username, backgound, notes, cb) {
+userSchema.statics.updateUser = function(username, background, notes, wTD, wN, cb) {
   this.findOne({username: username}, function (err, user) {
     if (err) cb('no user');
     if (user) {
       user.background = background;
       user.notes = notes;
+      user.wTodo = wTD;
+      user.wNote = wN;
+      user.save(cb);
     }
   });
 };
+
+userSchema.statics.getUser = function(username, cb) {
+  this.findOne({username: username}, function (err, user) {
+    if (err) console.log('Could not get notes');
+    if (user) {
+      cb (null, user);
+    }
+  });
+};
+
 
 module.exports = mongoose.model('User', userSchema);

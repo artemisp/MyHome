@@ -3,10 +3,6 @@ var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 var MongoClient = require('mongodb').MongoClient;
-//var ObjectId = require('mongodb').ObjectID;
-//var mongoose = require('mongoose');
-
-
 
 app.use(bodyParser.json());
 app.set('view engine', 'html');
@@ -34,38 +30,23 @@ app.use(cookieSession({
 
 app.get('/', function (req, res) {
   if (req.session.username && req.session.username !== '') {
-    res.redirect('/protected');
+    var user = req.session.username;
+    User.getUser(user, function (err, user) {
+      if (err) res.json({isValid: false});
+      else {
+        console.log(user);
+        res.json({isValid: true, username: user.username, background: user.background, notes: user.notes,
+          wTD: user.wTodo, wN: user.wNote});
+      }
+   })
   } else {
-    res.redirect('/login');
+    res.json({isValid: false});
   }
 });
 
-app.post('/login', function(req, res) {
-  console.log('got login request');
-  username = req.body.username;
-  password = req.body.password;
-  User.checkIfLegit(username, password, function(err, isRight) {
-    if (err) {
-      res.json({isValid: false});
-    } else {
-      if (isRight) {
-        req.session.username = username;
-        res.json({isValid: true}); //add to the json alo queries to get data from user
-      } else {
-        res.json({isValid: false});
-      }
-    }
-  });
-
-});
-
-app.post('/logout', function(req, res) {
-  req.session.username = '';
-  console.log('loged out');
-});
-
 app.post('/register', function(req, res) {
-  User.addUser(req.body.username, req.body.password, function(err) {
+  User.addUser(req.body.username, req.body.password, req.body.background, req.body.notes, req.body.wTD, req.body.wN,
+      function(err) {
     if (err) {
       res.json({isValid: false});
     }
@@ -76,10 +57,42 @@ app.post('/register', function(req, res) {
 });
 
 
-app.get('/protected', function(req, res) {
-  if (!req.session.username || req.session.username === '') {
-    res.send('You tried to access a protected page');
-  } else {
-    
-  }
+app.post('/login', function(req, res) {
+  console.log('got login request');
+  username = req.body.username;
+  password = req.body.password;
+
+  User.checkIfLegit(username, password, function(err, isRight) {
+    if (err) {
+      res.json({isValid: false});
+    } else {
+      if (isRight) {
+        req.session.username = username;
+        User.getUser(username, function (err, user) {
+          if (err) res.json({isValid: false});
+          else {
+            console.log(user);
+            res.json({isValid: true, username: user.username, background: user.background, notes: user.notes,
+              wTD: user.wTodo, wN: user.wNote });
+          }
+        })
+      } else {
+        res.json({isValid: false});
+      }
+    }
+  });
+
+});
+
+app.post('/logout', function(req, res) {
+  User.updateUser(req.body.username, req.body.background, req.body.notes, req.body.wTD, req.body.wN, function(err) {
+    if (err) {
+      res.json({isValid: false});
+    }
+    else {
+      res.json({isValid: true});
+    }
+  });
+  req.session.username = '';
+  console.log('logged out');
 });

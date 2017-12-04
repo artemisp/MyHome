@@ -42,7 +42,41 @@ textarea#noteText {
     color: black;
     background-color: yellow;
     border: hidden;
+    resize: vertical;
+    overflow: scroll;
 }
+
+h3#todo {
+    position: absolute;
+    top: 50%;
+    left: 3%;
+    padding: 10px;
+    width: 35%;
+    background-color: lightblue;
+    color: black;
+}
+
+textarea#todoText {
+    height: 200px;
+    width: 100%;
+    color: black;
+    background-color: lightblue;
+    border: hidden;
+    resize: vertical;
+    overflow: scroll;
+}
+
+
+#widgetsBtn {
+    height: 30px;
+    width: 100px;
+    background-color: black;
+    color: white;
+    position: absolute;
+    top: 3%;
+    left: 70%;
+}
+
 
 #backgroundBtn {
     height: 30px;
@@ -62,6 +96,15 @@ textarea#noteText {
     position: absolute;
     top: 3%;
     left: 90%;
+}
+
+div#widgets-popup {
+    display: none;
+    position: absolute;
+    top: 10%;
+    left: 70.3%;
+    width: 100px;
+    height: 200px;
 }
 
 div#background-popup {

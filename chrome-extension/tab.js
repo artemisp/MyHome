@@ -1,20 +1,3 @@
-var data = {
-  "users":
-  {
-    "artemis":{
-    "password": "1234",
-      "text": "hello",
-      "background": "http://www.allwhitebackground.com/images/2/2273.jpg"
-  },
-
-    "poly":{
-      "password": "123",
-      "text": "mama",
-      "background": "https://hdwallsource.com/img/2014/4/background-wallpaper-22928-23564-hd-wallpapers.jpg"
-    }
-  }
-};
-/*********************************************************************************************************************/
 $(function updateClock(){
   var currentTime = new Date(),
       currentHours = currentTime.getHours(),
@@ -25,118 +8,147 @@ $(function updateClock(){
 
 var isAuthenticated = false;
 var currUser = null;
-var background = '';
+var url = '';
 
 
-$(function authentication() {
-  if (isAuthenticated) {
-    $('#noteText').val(data.users[username]['text']);
-    $('#body').css({background: 'url(' + data.users[username]['background'] + ')'});
+$.ajax({
+  url: 'http://localhost:3000/',
+  type: 'GET',
+  success: function (res) {
+    if (res.isValid) {
+      isAuthenticated = true;
+      currUser = res.username;
+      url = res.background;
+
+      $('#noteText').val(res.notes);
+      $('#body').css({background: 'url('+url+')'});
+
+      if (res.wN) {
+        console.log(res.wN)
+        $('#notes').css({display: 'block'});
+        $('#notepadSelector').attr('checked', true);
+      }
+      else {
+        $('#notes').css({display: 'none'});
+        $('#notepadSelectorSelector').attr('checked', false);
+      }
+      if (res.wTD) {
+        $('#todo').css({display: 'block'});
+        $('#todoSelector').attr('checked', true);
+      }
+      else {
+        $('#todo').css({display: 'none'});
+        $('#todoSelector').attr('checked', false);
+      }
+
+    }
   }
 });
 
 
-  $('#accountBtn').click(function () {
-   $('#authErr').css({display: 'none'});
-    $('#signupErr').css({display: 'none'});
-    $('#username').val('');
-    $('#password').val('');
-    if (isAuthenticated) {
+$('#accountBtn').click(function () {
+  $('#authErr').css({display: 'none'});
+  $('#signupErr').css({display: 'none'});
+  $('#username').val('');
+  $('#password').val('');
+  if (isAuthenticated) {
       $('#username').css({display : 'none'});
       $('#password').css({display : 'none'});
       $('#signInBtn').css({display : 'none'});
       $('#signUpBtn').css({display : 'none'});
       $('#signOutBtn').css({display : 'block'});
-    } else {
+  } else {
       $('#username').css({display : 'block'});
       $('#password').css({display : 'block'});
       $('#signInBtn').css({display : 'block'});
       $('#signUpBtn').css({display : 'block'});
       $('#signOutBtn').css({display : 'none'});
-    }
+  }
 
-    var $popup = $('#authentication-popup');
-    if ($popup.css('display') === 'none') $popup.css({display : 'block'});
-    else if ($popup.css('display') === 'block') $popup.css({display : 'none'});
+  var $popup = $('#authentication-popup');
 
-  });
-
+  if ($popup.css('display') === 'none') $popup.css({display : 'block'});
+  else  $popup.css({display : 'none'});
+});
 
 $('#signUpBtn').click(function () {
   var username = $('#username').val();
   var password = $('#password').val();
-  var text = $('#noteText').val();
   $.ajax({
     url: 'http://localhost:3000/register',
-    data: {username: username, password: password},
+    data: {username: username, password: password, notes: $('#noteText').val(), background: url,
+      wTD: $('#todoSelector').is(':checked'), wN: $('#notepadSelector').is(':checked') },
     type: 'POST',
     success: function (data) {
       if (data.isValid) {
         console.log('New user registered.');
+        $('#authentication-popup').css({display: 'none'});
       } else {
         showSignupError();
       }
     }
   })
-
-    /*if (username && password) {
-      data.users[username] = {
-        "password": password,
-        "text": text
-      };
-      isAuthenticated = true;
-    } else {
-      username = null;
-      $('#signupErr').css({display: 'block'});
-    }*/
-  });
+});
 
 
-  $('#signInBtn').click(function () {
+$('#signInBtn').click(function () {
     var username = $('#username').val();
     var password = $('#password').val();
     $.ajax({
-      url: '/login',
+      url: 'http://localhost:3000/login',
       data: {username: username, password: password},
       type: 'POST',
       success: function (data) {
         if (data.isValid) {
-          //TODO: update data instead
-          currUser = username;
           isAuthenticated = true;
-          console.log('User signed in.');
+          currUser = username;
+          url = data.background;
+          $('#noteText').val(data.notes);
+          $('#body').css({background: 'url('+data.background+')'});
+          /*if (res.wN) {
+            $('#notes').css({display: 'block'});
+            $('#notepadSelector').attr('checked', true);
+          }
+          else {
+            $('#notes').css({display: 'none'});
+            $('#notepadSelectorSelector').attr('checked', false);
+          }
+          if (res.wTD) {
+            $('#todo').css({display: 'block'});
+            $('#todoSelector').attr('checked', true);
+          }
+          else {
+            $('#todo').css({display: 'none'});
+            $('#todoSelector').attr('checked', false);
+          }*/
+
+          $('#authentication-popup').css({display: 'none'});
         } else {
           showAuthError();
         }
       }
 
     })
-
-
-    /*var user_obj = data.users[username];
-    if (user_obj && user_obj['password'] === password) {
-      isAuthenticated = true;
-      $('#noteText').val(user_obj['text']);
-      $('#body').css({background: 'url('+data.users[username]['background']+')'});
-    } else {
-      username = null;
-      $('#authErr').css({display: 'block'});
-    }*/
-
   });
 
   $('#signOutBtn').click(function () {
     //update user
     $.ajax({
-      url: '/logout',
-      data: {username: currUser, background: background, notes: $('#noteText').val()},
+      url: 'http://localhost:3000/logout',
+      data: {username: currUser, background: url, notes: $('#noteText').val(),
+        wTD: $('#todoSelector').is(':checked'), wN: $('#notepadSelector').is(':checked')},
       type: 'POST'
     });
 
     $('#noteText').val('');
     $('#body').css({background: 'url()'});
+    $('#todo').css({display: 'block'});
+    $('#notes').css({display: 'block'});
     currUser = null;
+    url = '';
     isAuthenticated = false;
+
+    $('#authentication-popup').css({display: 'none'});
   });
 
 
@@ -148,24 +160,42 @@ $('#signUpBtn').click(function () {
     $('#signupErr').css({display: 'block'});
   };
 
+$('#backgroundBtn').click(function () {
+  $('#background-url').val('');
+  var $popup = $('#background-popup');
 
-  $('#backgroundBtn').click(function () {
-    $('#background-url').val('');
-    var $popup = $('#background-popup');
-    if ($popup.css('display') === 'none') $popup.css({display: 'block'});
-    else if ($popup.css('display') === 'block') $popup.css({display: 'none'});
+  if ($popup.css('display') === 'none') $popup.css({display : 'block'});
+  else  $popup.css({display : 'none'});
+});
+
+$('#uploadBtn').click(function () {
+  url = $('#background-url').val();
+  $('#body').css({background: 'url(' + url + ')'});
+  $('#background-popup').css({display: 'none'});
+});
+
+$('#widgetsBtn').click(function () {
+  var $popup = $('#widgets-popup');
+
+  if ($popup.css('display') === 'none') $popup.css({display : 'block'});
+  else  $popup.css({display : 'none'});
+});
+
+$('#SubmitWidgetsBtn').click(function () {
+  $.ajax({
+    url: 'http://localhost:3000/logout',
+    data: {username: currUser, background: url, notes: $('#noteText').val(),
+      wTD: $('#todoSelector').is(':checked'), wN: $('#notepadSelector').is(':checked')},
+    type: 'POST'
   });
+  if ($('#notepadSelector').is(':checked')) $('#notes').css({display: 'block'});
+  else $('#notes').css({display: 'none'});
+  if ($('#todoSelector').is(':checked')) $('#todo').css({display: 'block'});
+  else $('#todo').css({display: 'none'});
 
-  $('#uploadBtn').click(function () {
-    var url = $('#background-url').val();
-    if (url) {
-      background = 'url(' + url + ')';
-      $('#body').css({background: 'url(' + url + ')'});
+  $('#widgets-popup').css({display: 'none'});
+});
 
-      if (isAuthenticated) {
-        //post an update user request
-      }
-    }
 
-  });
+
 
