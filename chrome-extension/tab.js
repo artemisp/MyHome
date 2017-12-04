@@ -9,6 +9,8 @@ $(function updateClock(){
 var isAuthenticated = false;
 var currUser = null;
 var url = '';
+var wN = true;
+var wTD = true;
 
 
 $.ajax({
@@ -19,6 +21,8 @@ $.ajax({
       isAuthenticated = true;
       currUser = res.username;
       url = res.background;
+      wN = res.wN;
+      wTD = res.wTD;
 
       $('#noteText').val(res.notes);
       $('#body').css({background: 'url('+url+')'});
@@ -178,13 +182,28 @@ $('#uploadBtn').click(function () {
 $('#widgetsBtn').click(function () {
   var $popup = $('#widgets-popup');
 
+  if (wN) {
+    $('#notepadSelector').css({'checked': true});
+  }
+  else {
+    $('#notepadSelectorSelector').css({'checked': false});
+  }
+  if (wTD) {
+    $('#todoSelector').css({'checked': true});
+  }
+  else {
+    $('#todoSelector').css({'checked': false});
+  }
+
   if ($popup.css('display') === 'none') $popup.css({display : 'block'});
   else  $popup.css({display : 'none'});
 });
 
 $('#SubmitWidgetsBtn').click(function () {
+  wN =  $('#notepadSelector').is(':checked');
+  wTD = $('#todoSelector').is(':checked');
   $.ajax({
-    url: 'http://localhost:3000/logout',
+    url: 'http://localhost:3000/submitWidgets',
     data: {username: currUser, background: url, notes: $('#noteText').val(),
       wTD: $('#todoSelector').is(':checked'), wN: $('#notepadSelector').is(':checked')},
     type: 'POST'

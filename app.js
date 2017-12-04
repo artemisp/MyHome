@@ -96,3 +96,14 @@ app.post('/logout', function(req, res) {
   req.session.username = '';
   console.log('logged out');
 });
+
+app.post('/submitWidgets', function(req, res) {
+  User.updateUser(req.body.username, req.body.background, req.body.notes, req.body.wTD, req.body.wN, function(err) {
+    if (err) {
+      res.json({isValid: false});
+    }
+    else {
+      res.json({isValid: true});
+    }
+  });
+});
