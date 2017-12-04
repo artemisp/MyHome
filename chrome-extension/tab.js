@@ -24,21 +24,20 @@ $.ajax({
       $('#body').css({background: 'url('+url+')'});
 
       if (res.wN) {
-        console.log(res.wN)
         $('#notes').css({display: 'block'});
-        $('#notepadSelector').attr('checked', true);
+        $('#notepadSelector').prop({'checked': true});
       }
       else {
         $('#notes').css({display: 'none'});
-        $('#notepadSelectorSelector').attr('checked', false);
+        $('#notepadSelectorSelector').prop({'checked': false});
       }
       if (res.wTD) {
         $('#todo').css({display: 'block'});
-        $('#todoSelector').attr('checked', true);
+        $('#todoSelector').prop({'checked': true});
       }
       else {
         $('#todo').css({display: 'none'});
-        $('#todoSelector').attr('checked', false);
+        $('#todoSelector').prop({'checked': false});
       }
 
     }
@@ -105,22 +104,22 @@ $('#signInBtn').click(function () {
           url = data.background;
           $('#noteText').val(data.notes);
           $('#body').css({background: 'url('+data.background+')'});
-          /*if (res.wN) {
+          if (data.wN) {
             $('#notes').css({display: 'block'});
-            $('#notepadSelector').attr('checked', true);
+            $('#notepadSelector').prop({'checked': true});
           }
           else {
             $('#notes').css({display: 'none'});
-            $('#notepadSelectorSelector').attr('checked', false);
+            $('#notepadSelector').prop({'checked': false});
           }
-          if (res.wTD) {
+          if (data.wTD) {
             $('#todo').css({display: 'block'});
-            $('#todoSelector').attr('checked', true);
+            $('#todoSelector').prop({'checked': true});
           }
           else {
             $('#todo').css({display: 'none'});
-            $('#todoSelector').attr('checked', false);
-          }*/
+            $('#todoSelector').prop({'checked': false});
+          }
 
           $('#authentication-popup').css({display: 'none'});
         } else {
@@ -144,6 +143,8 @@ $('#signInBtn').click(function () {
     $('#body').css({background: 'url()'});
     $('#todo').css({display: 'block'});
     $('#notes').css({display: 'block'});
+    $('#todoSelector').prop('checked', true);
+    $('#notepadSelector').prop('checked', true);
     currUser = null;
     url = '';
     isAuthenticated = false;
