@@ -25,6 +25,7 @@ $.ajax({
       wTD = res.wTD;
 
       $('#noteText').val(res.notes);
+      $('#todoText').val(res.todo);
       $('#body').css({background: 'url('+url+')'});
 
       if (res.wN) {
@@ -79,8 +80,8 @@ $('#signUpBtn').click(function () {
   var password = $('#password').val();
   $.ajax({
     url: 'http://localhost:3000/register',
-    data: {username: username, password: password, notes: $('#noteText').val(), background: url,
-      wTD: $('#todoSelector').is(':checked'), wN: $('#notepadSelector').is(':checked') },
+    data: {username: username, password: password, notes: $('#noteText').val(), todo: $('#todoText').val(), display,
+      background: url, wTD: $('#todoSelector').is(':checked'), wN: $('#notepadSelector').is(':checked') },
     type: 'POST',
     success: function (data) {
       if (data.isValid) {
@@ -107,6 +108,7 @@ $('#signInBtn').click(function () {
           currUser = username;
           url = data.background;
           $('#noteText').val(data.notes);
+          $('#todoText').val(data.todo);
           $('#body').css({background: 'url('+data.background+')'});
           if (data.wN) {
             $('#notes').css({display: 'block'});
@@ -138,12 +140,13 @@ $('#signInBtn').click(function () {
     //update user
     $.ajax({
       url: 'http://localhost:3000/logout',
-      data: {username: currUser, background: url, notes: $('#noteText').val(),
+      data: {username: currUser, background: url, notes: $('#noteText').val(), todo: $('#todoText').val(),
         wTD: $('#todoSelector').is(':checked'), wN: $('#notepadSelector').is(':checked')},
       type: 'POST'
     });
 
     $('#noteText').val('');
+    $('#todoText').val('');
     $('#body').css({background: 'url()'});
     $('#todo').css({display: 'block'});
     $('#notes').css({display: 'block'});
@@ -204,7 +207,7 @@ $('#SubmitWidgetsBtn').click(function () {
   wTD = $('#todoSelector').is(':checked');
   $.ajax({
     url: 'http://localhost:3000/submitWidgets',
-    data: {username: currUser, background: url, notes: $('#noteText').val(),
+    data: {username: currUser, background: url, notes: $('#noteText').val(), todo: $('#todoText').val(),
       wTD: $('#todoSelector').is(':checked'), wN: $('#notepadSelector').is(':checked')},
     type: 'POST'
   });

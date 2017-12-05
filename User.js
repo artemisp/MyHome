@@ -11,6 +11,7 @@ var userSchema = new Schema({
   password: { type: String, required: true },
   background: { type: String },
   notes: { type: String },
+  todo: { type: String},
   wTodo: { type: Boolean },
   wNote: { type: Boolean }
 });
@@ -32,8 +33,8 @@ userSchema.pre('save', function(next) {
   });
 });
 
-userSchema.statics.addUser = function(username, password, background, notes, wTD, wN, cb) {
-  var newUser = new this({ username: username, password: password, background: background, notes: notes,
+userSchema.statics.addUser = function(username, password, background, notes, todo, wTD, wN, cb) {
+  var newUser = new this({ username: username, password: password, background: background, notes: notes, todo: todo,
     wTodo: wTD, wNote: wN});
   newUser.save(cb);
 };
@@ -50,12 +51,13 @@ userSchema.statics.checkIfLegit = function(username, password, cb) {
   });
 };
 
-userSchema.statics.updateUser = function(username, background, notes, wTD, wN, cb) {
+userSchema.statics.updateUser = function(username, background, notes, todo, wTD, wN, cb) {
   this.findOne({username: username}, function (err, user) {
     if (err) cb('no user');
     if (user) {
       user.background = background;
       user.notes = notes;
+      user.todo = todo;
       user.wTodo = wTD;
       user.wNote = wN;
       user.save(cb);

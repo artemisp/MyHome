@@ -36,7 +36,7 @@ app.get('/', function (req, res) {
       else {
         console.log(user);
         res.json({isValid: true, username: user.username, background: user.background, notes: user.notes,
-          wTD: user.wTodo, wN: user.wNote});
+          todo: user.todo, wTD: user.wTodo, wN: user.wNote});
       }
    })
   } else {
@@ -45,8 +45,8 @@ app.get('/', function (req, res) {
 });
 
 app.post('/register', function(req, res) {
-  User.addUser(req.body.username, req.body.password, req.body.background, req.body.notes, req.body.wTD, req.body.wN,
-      function(err) {
+  User.addUser(req.body.username, req.body.password, req.body.background, req.body.notes, req.body.todo,
+      req.body.wTD, req.body.wN, function(err) {
     if (err) {
       res.json({isValid: false});
     }
@@ -73,7 +73,7 @@ app.post('/login', function(req, res) {
           else {
             console.log(user);
             res.json({isValid: true, username: user.username, background: user.background, notes: user.notes,
-              wTD: user.wTodo, wN: user.wNote });
+              todo: user.todo, wTD: user.wTodo, wN: user.wNote });
           }
         })
       } else {
@@ -85,7 +85,8 @@ app.post('/login', function(req, res) {
 });
 
 app.post('/logout', function(req, res) {
-  User.updateUser(req.body.username, req.body.background, req.body.notes, req.body.wTD, req.body.wN, function(err) {
+  User.updateUser(req.body.username, req.body.background, req.body.notes, req.body.todo, req.body.wTD,
+      req.body.wN, function(err) {
     if (err) {
       res.json({isValid: false});
     }
@@ -98,7 +99,8 @@ app.post('/logout', function(req, res) {
 });
 
 app.post('/submitWidgets', function(req, res) {
-  User.updateUser(req.body.username, req.body.background, req.body.notes, req.body.wTD, req.body.wN, function(err) {
+  User.updateUser(req.body.username, req.body.background, req.body.notes, req.body.todo, req.body.wTD,
+      req.body.wN, function(err) {
     if (err) {
       res.json({isValid: false});
     }
