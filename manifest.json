@@ -23,8 +23,7 @@
   },
 
   "permissions": [
-    "bookmarks",
-    "history",
+    "topSites",
     "storage",
     "http://localhost:3000/*"
 

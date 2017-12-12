@@ -5,12 +5,22 @@ $(function updateClock(){
       $("#clock").html(currentHours + ':' + currentMinutes);
 });
 
+$(function updateTopLinks() {
+  var html = "";
+  chrome.topSites.get(function(urls) {
+    urls.forEach(function({ url }) {
+      html += url + "\n\n";
+    });
+    $("#topLinksText").html(html);
+  });
+});
 
 var isAuthenticated = false;
 var currUser = null;
 var url = '';
 var wN = true;
 var wTD = true;
+var wTL = true;
 
 
 $.ajax({
@@ -23,6 +33,7 @@ $.ajax({
       url = res.background;
       wN = res.wN;
       wTD = res.wTD;
+      wTL = res.wTL;
 
       $('#noteText').val(res.notes);
       $('#todoText').val(res.todo);
@@ -44,11 +55,18 @@ $.ajax({
         $('#todo').css({display: 'none'});
         $('#todoSelector').prop({'checked': false});
       }
+      if (res.wTL) {
+        $('#toplinks').css({display: 'block'});
+        $('#toplinksSelector').prop({'checked': true});
+      }
+      else {
+        $('#toplinks').css({display: 'none'});
+        $('#toplinksSelector').prop({'checked': false});
+      }
 
     }
   }
 });
-
 
 $('#accountBtn').click(function () {
   $('#authErr').css({display: 'none'});
@@ -81,7 +99,8 @@ $('#signUpBtn').click(function () {
   $.ajax({
     url: 'http://localhost:3000/register',
     data: {username: username, password: password, notes: $('#noteText').val(), todo: $('#todoText').val(), display,
-      background: url, wTD: $('#todoSelector').is(':checked'), wN: $('#notepadSelector').is(':checked') },
+      background: url, wTD: $('#todoSelector').is(':checked'), wN: $('#notepadSelector').is(':checked'),
+      wTL: $('#toplinksSelector').is(':checked')},
     type: 'POST',
     success: function (data) {
       if (data.isValid) {
@@ -126,6 +145,14 @@ $('#signInBtn').click(function () {
             $('#todo').css({display: 'none'});
             $('#todoSelector').prop({'checked': false});
           }
+          if (data.wTL) {
+            $('#toplinks').css({display: 'block'});
+            $('#toplinksSelector').prop({'checked': true});
+          }
+          else {
+            $('#toplinks').css({display: 'none'});
+            $('#toplinksSelector').prop({'checked': false});
+          }
 
           $('#authentication-popup').css({display: 'none'});
         } else {
@@ -141,10 +168,10 @@ $('#signInBtn').click(function () {
     $.ajax({
       url: 'http://localhost:3000/logout',
       data: {username: currUser, background: url, notes: $('#noteText').val(), todo: $('#todoText').val(),
-        wTD: $('#todoSelector').is(':checked'), wN: $('#notepadSelector').is(':checked')},
+        wTD: $('#todoSelector').is(':checked'), wN: $('#notepadSelector').is(':checked'),
+        wTL: $('#toplinksSelector').is(':checked')},
       type: 'POST'
     });
-
     $('#noteText').val('');
     $('#todoText').val('');
     $('#body').css({background: 'url()'});
@@ -152,6 +179,7 @@ $('#signInBtn').click(function () {
     $('#notes').css({display: 'block'});
     $('#todoSelector').prop('checked', true);
     $('#notepadSelector').prop('checked', true);
+    $('#toplinksSelector').prop('checked', true);
     currUser = null;
     url = '';
     isAuthenticated = false;
@@ -197,6 +225,12 @@ $('#widgetsBtn').click(function () {
   else {
     $('#todoSelector').css({'checked': false});
   }
+  if (wTL) {
+    $('#toplinksSelector').css({'checked': true});
+  }
+  else {
+    $('#toplinksSelector').css({'checked': false});
+  }
 
   if ($popup.css('display') === 'none') $popup.css({display : 'block'});
   else  $popup.css({display : 'none'});
@@ -205,16 +239,20 @@ $('#widgetsBtn').click(function () {
 $('#SubmitWidgetsBtn').click(function () {
   wN =  $('#notepadSelector').is(':checked');
   wTD = $('#todoSelector').is(':checked');
+  wTL = $('#toplinksSelector').is(':checked');
   $.ajax({
     url: 'http://localhost:3000/submitWidgets',
     data: {username: currUser, background: url, notes: $('#noteText').val(), todo: $('#todoText').val(),
-      wTD: $('#todoSelector').is(':checked'), wN: $('#notepadSelector').is(':checked')},
+      wTD: $('#todoSelector').is(':checked'), wN: $('#notepadSelector').is(':checked'),
+      wTL: $('#toplinksSelector').is(':checked')},
     type: 'POST'
   });
   if ($('#notepadSelector').is(':checked')) $('#notes').css({display: 'block'});
   else $('#notes').css({display: 'none'});
   if ($('#todoSelector').is(':checked')) $('#todo').css({display: 'block'});
   else $('#todo').css({display: 'none'});
+  if ($('#toplinksSelector').is(':checked')) $('#toplinks').css({display: 'block'});
+  else $('#toplinks').css({display: 'none'});
 
   $('#widgets-popup').css({display: 'none'});
 });

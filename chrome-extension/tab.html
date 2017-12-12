@@ -7,9 +7,6 @@
 
 <h1 id="clock">00:00</h1>
 
-
-<div id="weather"></div>
-
 <form method="get" action="http://www.google.com/search">
     <input id="search" type="text" name="q" size="31" maxlength="255" value="" placeholder="Search..." />
     <br />
@@ -24,6 +21,12 @@
     <text>TODO</text>
     <label for="todoText"></label><textarea id="todoText"></textarea>
 </h3>
+
+<h4 id="toplinks">
+    <text>TOP LINKS</text>
+    <label for="toplinksText"></label><textarea readonly id="topLinksText"></textarea>
+</h4>
+
 
 <button id="backgroundBtn" type="button">Change Background</button>
 <button id="accountBtn" type="button">Account</button>
@@ -47,6 +50,7 @@
 <div id="widgets-popup">
       <input type="checkbox" id="notepadSelector" checked>Notepad</input>
       <input type="checkbox" id="todoSelector" checked>ToDo List</input>
+      <input type="checkbox" id="toplinksSelector" checked>Top Links</input>
     <button id="SubmitWidgetsBtn">Submit</button>
 </div>
 

@@ -1,8 +1,5 @@
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/db');
-
-var bcrypt = require('bcrypt');
-
 var Schema = mongoose.Schema;
 var bcrypt = require('bcrypt');
 
@@ -13,7 +10,8 @@ var userSchema = new Schema({
   notes: { type: String },
   todo: { type: String},
   wTodo: { type: Boolean },
-  wNote: { type: Boolean }
+  wNote: { type: Boolean },
+  wTopLinks: { type: Boolean }
 });
 
 userSchema.pre('save', function(next) {
@@ -33,9 +31,9 @@ userSchema.pre('save', function(next) {
   });
 });
 
-userSchema.statics.addUser = function(username, password, background, notes, todo, wTD, wN, cb) {
+userSchema.statics.addUser = function(username, password, background, notes, todo, wTD, wN, wTL, cb) {
   var newUser = new this({ username: username, password: password, background: background, notes: notes, todo: todo,
-    wTodo: wTD, wNote: wN});
+    wTodo: wTD, wNote: wN, wTopLinks: wTL});
   newUser.save(cb);
 };
 
@@ -51,7 +49,7 @@ userSchema.statics.checkIfLegit = function(username, password, cb) {
   });
 };
 
-userSchema.statics.updateUser = function(username, background, notes, todo, wTD, wN, cb) {
+userSchema.statics.updateUser = function(username, background, notes, todo, wTD, wN, wTL, cb) {
   this.findOne({username: username}, function (err, user) {
     if (err) cb('no user');
     if (user) {
@@ -60,6 +58,7 @@ userSchema.statics.updateUser = function(username, background, notes, todo, wTD,
       user.todo = todo;
       user.wTodo = wTD;
       user.wNote = wN;
+      user.wTopLinks = wTL;
       user.save(cb);
     }
   });

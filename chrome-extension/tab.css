@@ -66,6 +66,25 @@ textarea#todoText {
     overflow: scroll;
 }
 
+h4#toplinks {
+    position: absolute;
+    top: 3%;
+    left: 3%;
+    padding: 10px;
+    width: 30%;
+    background-color: pink;
+    color: black;
+}
+
+textarea#topLinksText {
+    height: 200px;
+    width: 100%;
+    color: black;
+    background-color: pink;
+    border: hidden;
+    resize: vertical;
+    overflow: scroll;
+}
 
 #widgetsBtn {
     height: 30px;
@@ -157,3 +176,4 @@ input#password {
 button#signOutBtn {
     display: none;
 }
+
