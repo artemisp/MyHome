@@ -98,7 +98,7 @@ $('#signUpBtn').click(function () {
   var password = $('#password').val();
   $.ajax({
     url: 'http://localhost:3000/register',
-    data: {username: username, password: password, notes: $('#noteText').val(), todo: $('#todoText').val(), display,
+    data: {username: username, password: password, notes: $('#noteText').val(), todo: $('#todoText').val(),
       background: url, wTD: $('#todoSelector').is(':checked'), wN: $('#notepadSelector').is(':checked'),
       wTL: $('#toplinksSelector').is(':checked')},
     type: 'POST',
