@@ -6,6 +6,13 @@ body {
     color: #999;
     background-color: white;
 }
+
+.parent {
+    height: 0;
+    padding-bottom: 56.25%; /* 16:9 */
+    position: relative;
+}
+
 #clock {
     position: absolute;
     top: 30%;
@@ -118,12 +125,22 @@ textarea#topLinksText {
 }
 
 div#widgets-popup {
-    display: none;
     position: absolute;
+    color:black;
+    font-style: normal;
+    font-size:15px;
     top: 10%;
     left: 70.3%;
     width: 100px;
     height: 200px;
+}
+
+div#widgets-popup input {
+    position: center;
+    vertical-align: center;
+    font-style: normal;
+    font-size:12px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif
 }
 
 div#background-popup {
